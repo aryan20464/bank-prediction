@@ -24,10 +24,18 @@ if uploaded_train_file:
     st.subheader("Data Preprocessing")
     train_data['y'] = train_data['y'].apply(lambda x: 1 if x == "yes" else 0)
     categorical_cols = train_data.select_dtypes(include=["object"]).columns.tolist()
-    categorical_cols.remove('y')
+    
+    # Exclude 'y' if present
+    if 'y' in categorical_cols:
+        categorical_cols.remove('y')
+    
+    # One-hot encoding for categorical variables
     train_data = pd.get_dummies(train_data, columns=categorical_cols, drop_first=True)
+    
+    # Splitting features and target variable
     X = train_data.drop('y', axis=1)
     y = train_data['y']
+
     
     # Model Training
     st.subheader("Model Training")
